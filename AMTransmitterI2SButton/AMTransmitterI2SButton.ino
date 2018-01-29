@@ -41,7 +41,7 @@ void setup()
   SET_PERI_REG_BITS(I2S_SAMPLE_RATE_CONF_REG(0), I2S_TX_BCK_DIV_NUM_V, 2, I2S_TX_BCK_DIV_NUM_S); 
 }
 
-//buffer to store modulated samples
+//buffer to store modulated samples. esp32 I2S Samples are always 16Bit
 short buff[1024];
 //sine represented in 16 values. at 13MHz sampling rate the resulting carrier is at around 835KHz
 int sintab[] = {0, 48, 90, 117, 127, 117, 90, 48, 0, -48, -90, -117, -127, -117, -90, -48};
@@ -77,5 +77,5 @@ void loop()
     }
   }
   //write the buffer (waits until a buffer is ready to be filled, that's timing for free)
-  i2s_write_bytes(i2s_num, (char*)buff, 2048, portMAX_DELAY);
+  i2s_write_bytes(i2s_num, (char*)buff, sizeof(buff), portMAX_DELAY);
 }
