@@ -2,7 +2,7 @@
 
 This is a simple project showing how to generate an AM radio transmission on 835kHz.
 
-Audio2Header converts audio files to a c++ header
+Audio2Header converts audio files to a c++ header.
 
 AMTransmitterI2S plays an audio loop.
 AMTransmitterI2SButton plays the audio sample on a button press.
