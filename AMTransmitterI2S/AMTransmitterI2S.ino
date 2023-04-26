@@ -14,7 +14,7 @@ static const i2s_config_t i2s_config = {
      .sample_rate = 1000000,  //not really used
      .bits_per_sample = (i2s_bits_per_sample_t)I2S_BITS_PER_SAMPLE_16BIT, 
      .channel_format = I2S_CHANNEL_FMT_ONLY_RIGHT,
-     .communication_format = I2S_COMM_FORMAT_I2S_MSB,
+     .communication_format = I2S_COMM_FORMAT_STAND_MSB,
      .intr_alloc_flags = ESP_INTR_FLAG_LEVEL1,
      .dma_buf_count = 2,
      .dma_buf_len = 1024  //big buffers to avoid noises
@@ -23,7 +23,7 @@ static const i2s_config_t i2s_config = {
 void setup() 
 {
   Serial.begin(115200);
-  rtc_clk_cpu_freq_set(RTC_CPU_FREQ_240M);              //highest cpu frequency
+  setCpuFrequencyMhz(240);                              //highest cpu frequency
   i2s_driver_install(i2s_num, &i2s_config, 0, NULL);    //start i2s driver
   i2s_set_pin(i2s_num, NULL);                           //use internal DAC
   i2s_set_sample_rates(i2s_num, 1000000);               //dummy sample rate, since the function fails at high values
@@ -66,5 +66,6 @@ void loop()
       pos = posLow = 0;
   }
   //write the buffer (waits until a buffer is ready to be filled, that's timing for free)
-  i2s_write_bytes(i2s_num, (char*)buff, sizeof(buff), portMAX_DELAY);
+  size_t bytes_written;
+  i2s_write(i2s_num, (char*)buff, sizeof(buff), &bytes_written, portMAX_DELAY);
 }
